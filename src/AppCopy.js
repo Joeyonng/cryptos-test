@@ -1,4 +1,4 @@
-import {Fragment, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import './App.css';
 
 /*
@@ -38,16 +38,23 @@ function Text(props) {
     'green': '#61BF1E',
     'red': '#FF492D',
   }
-  const {text, color, format} = props;
+  const {src, text, color, format} = props;
 
   return (
     <div
-      className="text"
+      className="cell"
       style={{
-        color: COLORS[color],
       }}
     >
-      {formatText(text, format)}
+      {src ? <img src={src} className="icon" alt="icon"/> : null}
+      <div
+        className="text"
+        style={{
+          color: COLORS[color],
+        }}
+      >
+        {formatText(text, format)}
+      </div>
     </div>
   )
 }
@@ -58,120 +65,108 @@ function App() {
     fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false&price_change_percentage=24h%2C7d")
       .then(response => response.json())
       .then((data) => {
+        console.log(data)
         setData(data);
       })
   },[])
 
   return (
     <div className="App">
-      <div className="background">
-        <div className="title">
-          <Text text="Watchlist"/>
-        </div>
-        <div className="table">
-          <Text
-            text="Currency"
-            color="grey"
-          />
-          <Text
-            text="Last"
-            color="grey"
-          />
-          <Text
-            text="24h%"
-            color="grey"
-          />
-          <Text
-            text="7d%"
-            color="grey"
-          />
-          <Text
-            text="Mrkt Cap"
-            color="grey"
-          />
+      <div className="title">
+        <Text text="Watchlist"/>
+      </div>
+      <div
+        style={{
+          padding: "10px",
+        }}
+      >
+        <table
+          className="table"
+        >
+          <div></div>
+          <thead>
+          <tr>
+            <td>
+              <Text
+                text="Currency"
+                color="grey"
+              />
+            </td>
+            <td>
+              <Text
+                text="Last"
+                color="grey"
+              />
+            </td>
+            <td>
+              <Text
+                text="24h%"
+                color="grey"
+              />
+            </td>
+            <td>
+              <Text
+                text="7d%"
+                color="grey"
+              />
+            </td>
+            <td>
+              <Text
+                text="MrktCap"
+                color="grey"
+              />
+            </td>
+          </tr>
+          </thead>
+          <tbody>
           {!data ? null : data.map((item, index) => (
-            <Fragment
+            <tr
               key={index}
+              className="row"
+              style={{
+                borderBottom: index !== data.length - 1 ? "1px solid rgba(30, 30, 30, 0.08)" : null
+              }}
             >
-              <div
-                className="cell"
-                style={index === 0 ? {
-                  paddingTop: "8px",
-                } : (index === data.length - 1 ? {
-                  paddingBottom: "8px",
-                  borderBottom: "0px"
-                } : undefined)}
-              >
-                <img src={item['image']} className="icon" alt="icon"/>
+              <td>
                 <Text
+                  src={item['image']}
                   text={item['symbol']}
                   color="black"
                   format="cap"
                 />
-              </div>
-              <div
-                className="cell"
-                style={index === 0 ? {
-                  paddingTop: "8px",
-                } : (index === data.length - 1 ? {
-                  paddingBottom: "8px",
-                  borderBottom: "0px"
-                } : undefined)}
-              >
+              </td>
+              <td>
                 <Text
                   text={item['current_price']}
                   color="dark"
                   format="num"
                 />
-              </div>
-              <div
-                className="cell"
-                style={index === 0 ? {
-                  paddingTop: "8px",
-                } : (index === data.length - 1 ? {
-                  paddingBottom: "8px",
-                  borderBottom: "0px"
-                } : undefined)}
-              >
+              </td>
+              <td>
                 <Text
                   text={item['price_change_percentage_24h_in_currency']}
                   color={item['price_change_percentage_24h_in_currency'] > 0 ? 'green' : 'red'}
                   format="per"
                 />
-              </div>
-              <div
-                className="cell"
-                style={index === 0 ? {
-                  paddingTop: "8px",
-                } : (index === data.length - 1 ? {
-                  paddingBottom: "8px",
-                  borderBottom: "0px"
-                } : undefined)}
-              >
+              </td>
+              <td>
                 <Text
                   text={item['price_change_percentage_7d_in_currency']}
                   color="dark"
                   format="per"
                 />
-              </div>
-              <div
-                className="cell"
-                style={index === 0 ? {
-                  paddingTop: "8px",
-                } : (index === data.length - 1 ? {
-                  paddingBottom: "8px",
-                  borderBottom: "0px"
-                } : undefined)}
-              >
+              </td>
+              <td>
                 <Text
                   text={item['market_cap']}
                   color="dark"
                   format="num"
                 />
-              </div>
-            </Fragment>
+              </td>
+            </tr>
           ))}
-        </div>
+          </tbody>
+        </table>
       </div>
     </div>
   );
