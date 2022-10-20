@@ -69,10 +69,16 @@ function App() {
           <Text text="Watchlist"/>
         </div>
         <div className="table">
-          <Text
-            text="Currency"
-            color="grey"
-          />
+          <div
+            style={{
+              marginLeft: "2px"
+            }}
+          >
+            <Text
+              text="Currency"
+              color="grey"
+            />
+          </div>
           <Text
             text="Last"
             color="grey"
@@ -99,7 +105,6 @@ function App() {
                   paddingTop: "8px",
                 } : (index === data.length - 1 ? {
                   paddingBottom: "8px",
-                  borderBottom: "0px"
                 } : undefined)}
               >
                 <img src={item['image']} className="icon" alt="icon"/>
@@ -169,6 +174,8 @@ function App() {
                   format="num"
                 />
               </div>
+
+              {index === data.length - 1 ? null : <div className="divider"/>}
             </Fragment>
           ))}
         </div>
