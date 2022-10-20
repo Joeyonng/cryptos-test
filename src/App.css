@@ -29,12 +29,13 @@
   box-sizing: border-box;
 
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr;
+  /*grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr;*/
+  grid-template-columns: 103px 78px 63px 52px auto;
 }
 
 .cell {
   height: 32px;
-  padding: 2px 0 2px 0;
+  padding: 2px 0 1px 0;
   display: flex;
   align-items: center;
 }
